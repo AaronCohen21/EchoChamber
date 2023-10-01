@@ -1,0 +1,19 @@
+{
+  "name": "EchoChamber",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Aaron Cohen",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "start": "concurrently \"yarn workspace server start\" \"yarn workspace client start\" -n \"EchoChamber,React\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.1",
+    "prettier": "^3.0.3"
+  }
+}
