@@ -10,7 +10,9 @@
     "client"
   ],
   "scripts": {
-    "start": "concurrently \"yarn workspace server start\" \"yarn workspace client start\" -n \"EchoChamber,React\""
+    "dev": "concurrently \"yarn workspace server dev\" \"yarn workspace client start\" -n \"EchoChamber,React\"",
+    "react:build": "yarn workspace client build",
+    "deploy": "concurrently \"yarn workspace server start\" \"yarn workspace client deploy\" -n \"EchoChamber,React\""
   },
   "devDependencies": {
     "concurrently": "^8.2.1",

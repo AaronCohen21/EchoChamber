@@ -1,0 +1,25 @@
+services:
+  app:
+    build: .
+    ports:
+      - '1738:1738'
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - static:/app/server/static
+
+  db:
+    image: postgres:14.6
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=EchoChamber
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./server/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - db-data:/db
+volumes:
+  db-data:
+  static:

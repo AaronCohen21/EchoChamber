@@ -12,5 +12,5 @@ Object.keys(routes).forEach(route => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Echo Chamber running on PORT:${PORT}`);
+  console.log(`Echo Chamber API running on PORT:${PORT}`);
 });
