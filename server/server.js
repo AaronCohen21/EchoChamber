@@ -1,11 +1,14 @@
 const express = require('express');
+const routes = require('require-dir-all')('./routes', {
+  recursive: true,
+  includeFiles: 'index.js',
+});
 
 const PORT = 1738;
-
 const app = express();
 
-app.get('/test', (req, res) => {
-  res.status(200).send({ data: 'Hello From Backend' });
+Object.keys(routes).forEach(route => {
+  app.use(`/api/v1/${route}`, routes[route].index);
 });
 
 app.listen(PORT, () => {

@@ -3,12 +3,16 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  const [title, setTitle] = useState('Loading...');
+  const [title, setTitle] = useState('Error: Cannot Connect To Backend');
 
   useEffect(() => {
-    fetch('/test')
+    fetch('/api/v1/status')
       .then(res => res.json())
-      .then(payload => setTitle(payload.data));
+      .then(payload => {
+        if (payload.status === 'alive') {
+          setTitle('Backend Connected Successfully!');
+        }
+      });
   }, []);
 
   return (
