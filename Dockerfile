@@ -1,12 +1,6 @@
-FROM node:18
-WORKDIR /app
-COPY package.json .
-COPY client/package.json ./client/
-COPY server/package.json ./server/
-COPY yarn.lock .
-RUN yarn install
-COPY . .
-EXPOSE 1738
-EXPOSE 3000
-RUN yarn react:build
-CMD [ "yarn", "deploy" ]
+FROM postgres:14.6
+EXPOSE 5432
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=EchoChamber
+ADD ./server/sql/init.sql /docker-entrypoint-initdb.d/

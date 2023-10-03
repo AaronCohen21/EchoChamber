@@ -1,6 +1,8 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: App.Dockerfile
     ports:
       - '1738:1738'
       - '3000:3000'
@@ -10,15 +12,12 @@ services:
       - static:/app/server/static
 
   db:
-    image: postgres:14.6
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=EchoChamber
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - '5432:5432'
     volumes:
-      - ./server/sql/init.sql:/docker-entrypoint-initdb.d/init.sql
       - db-data:/db
 volumes:
   db-data:
