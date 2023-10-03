@@ -7,5 +7,6 @@ COPY yarn.lock .
 RUN yarn install
 COPY . .
 EXPOSE 1738
+EXPOSE 3000
 RUN yarn react:build
 CMD [ "yarn", "deploy" ]

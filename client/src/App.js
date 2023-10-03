@@ -6,7 +6,7 @@ function App() {
   const [title, setTitle] = useState('Error: Cannot Connect To Backend');
 
   useEffect(() => {
-    fetch('/api/v1/status')
+    fetch('http://localhost:1738/api/v1/status')
       .then(res => res.json())
       .then(payload => {
         if (payload.status === 'alive') {
