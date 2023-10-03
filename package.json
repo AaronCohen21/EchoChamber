@@ -10,7 +10,9 @@
     "client"
   ],
   "scripts": {
-    "dev": "concurrently \"yarn workspace server dev\" \"yarn workspace client start\" -n \"EchoChamber,React\"",
+    "dev": "yarn db:startContainer && concurrently \"yarn workspace server dev\" \"yarn workspace client start\" -n \"EchoChamber,React\"",
+    "db:build": "docker build -t echochamber-db . && docker volume create echochamber_db-data-dev",
+    "db:startContainer": "docker start echochamber-db-dev || docker run -d -it -p 5432:5432 --name=echochamber-db-dev --mount source=echochamber_db-data-dev,target=/var/lib/postgresql/data echochamber-db",
     "react:build": "yarn workspace client build",
     "deploy": "concurrently --kill-others-on-fail \"yarn workspace server start\" \"yarn workspace client deploy\" -n \"EchoChamber,React\""
   },

@@ -1,3 +1,5 @@
+server/static/*
+
 # Logs
 logs
 *.log
