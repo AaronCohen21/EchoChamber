@@ -1,4 +1,5 @@
-server/static/*
+server/static/video/*
+server/static/images/*
 
 # Logs
 logs
