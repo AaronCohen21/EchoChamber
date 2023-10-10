@@ -1,5 +1,7 @@
 server/static/video/*
 server/static/images/*
+server/static/tmp/*
+server/sql/.project
 
 # Logs
 logs
