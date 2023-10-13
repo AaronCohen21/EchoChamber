@@ -1,18 +1,18 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE Metadata (
-    Id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY NOT NULL,
-    Thumbnail varchar(255),
-    Title varchar(255),
-    Description varchar(255),
-    ReleaseDate varchar(255)
+CREATE TABLE metadata (
+    id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY NOT NULL,
+    thumbnail varchar(255),
+    title varchar(255),
+    description varchar(255),
+    release_date varchar(255)
 );
 
-CREATE TABLE Movies (
-    Id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY NOT NULL,
-    FileName varchar(255) NOT NULL,
-    MediaName varchar(255) NOT NULL,
-    MetadataId uuid,
-    FOREIGN KEY (MetadataId) REFERENCES Metadata(Id)
+CREATE TABLE movies (
+    id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY NOT NULL,
+    file_name varchar(255) NOT NULL,
+    media_name varchar(255) NOT NULL,
+    metadata_id uuid,
+    FOREIGN KEY (metadata_id) REFERENCES metadata(id)
         ON UPDATE CASCADE
 );
