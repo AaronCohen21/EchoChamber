@@ -30,21 +30,20 @@ router.put('/', upload.single('file'), async (req, res) => {
       return;
     }
 
-    const uuid = await createDbEntry(req.file.originalname);
+    const uuid = await createDbEntry(req.file.originalname, req.file.filename);
 
-    // Move temp file to STATIC_DIR/video and assign original filename
+    // Move temp file to STATIC_DIR/video and assign original filename prepended with hash
     fs.renameSync(
       path.resolve(req.file.path),
-      path.resolve(`${STATIC_DIR}/video/${req.file.originalname}`)
+      path.resolve(
+        `${STATIC_DIR}/video/${req.file.filename}${req.file.originalname}`
+      )
     );
 
-    res.status(201).json({ status: '201 - Media Entry Created', uuid }).send();
+    res.status(201).send(uuid);
   } catch (err) {
     console.error(err);
-    res
-      .status(500)
-      .json({ status: '500 - Internal Server Error', message: err.message })
-      .send();
+    res.status(500).send(err.message);
   }
 });
 

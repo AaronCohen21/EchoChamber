@@ -11,6 +11,7 @@ CREATE TABLE Metadata (
 CREATE TABLE Movies (
     Id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY NOT NULL,
     FileName varchar(255) NOT NULL,
+    MediaName varchar(255) NOT NULL,
     MetadataId uuid,
     FOREIGN KEY (MetadataId) REFERENCES Metadata(Id)
         ON UPDATE CASCADE

@@ -8,7 +8,7 @@ const SQL_DIR = `${__dirname}/../../sql`;
 
 // TODO - it doesn't seem like anything being thrown in here is getting caught in the block in index.js
 
-module.exports.createDbEntry = async fileName => {
+module.exports.createDbEntry = async (fileName, salt) => {
   const client = new Client({
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
@@ -23,7 +23,7 @@ module.exports.createDbEntry = async fileName => {
       flag: 'r',
     }
   );
-  const dbResponse = await client.query(sql, [fileName]);
+  const dbResponse = await client.query(sql, [salt + fileName, fileName]);
   await client.end();
   return dbResponse.rows[0].id;
 };
@@ -31,9 +31,5 @@ module.exports.createDbEntry = async fileName => {
 module.exports.validateFile = file => {
   let error = false;
   let message = '';
-  if (fs.existsSync(`${STATIC_DIR}/video/${file.originalname}`)) {
-    error = true;
-    message = 'File already exists.';
-  }
   return { error: file.mimetype.split('/')[0] !== 'video' || error, message };
 };

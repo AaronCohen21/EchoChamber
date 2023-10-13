@@ -1,3 +1,3 @@
-INSERT INTO movies (filename)
-VALUES ($1)
+INSERT INTO movies (filename, medianame)
+VALUES ($1, $2)
 RETURNING movies.id;
