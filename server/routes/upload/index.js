@@ -17,14 +17,8 @@ const router = express.Router();
 router.put('/', upload.single('file'), async (req, res) => {
   try {
     const validationResults = validateFile(req.file);
-    if (validationResults.error) {
-      res
-        .status(400)
-        .json({
-          status: '400 - Bad Request, please upload a valid video file.',
-          message: validationResults.message,
-        })
-        .send();
+    if (!validationResults) {
+      res.status(400).send('Please upload a valid video file');
       // Delete uploaded file since it is invalid
       fs.unlinkSync(path.resolve(req.file.path));
       return;
