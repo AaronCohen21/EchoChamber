@@ -13,6 +13,7 @@ router.post('/:media', async (req, res) => {
     // Instead of an image this is going to accept a base64 encoded string of an image (or blob)
     // That way we can just grab the blob from the database and render it directly no hassle
     const mediaData = await getAndValidateMediaData(req, res);
+    if (!mediaData) return;
 
     const { thumbnail, title, description, releaseDate } = req.body;
     const thumbnailBuffer = thumbnail ? Buffer.from(thumbnail, 'base64') : null;
@@ -50,6 +51,7 @@ router.post('/:media', async (req, res) => {
 router.get('/:media', async (req, res) => {
   try {
     const mediaData = await getAndValidateMediaData(req, res);
+    if (!mediaData) return;
     res.status(200).send(mediaData);
   } catch (err) {
     console.error(err);
@@ -60,6 +62,7 @@ router.get('/:media', async (req, res) => {
 router.delete('/:media', async (req, res) => {
   try {
     const mediaData = await getAndValidateMediaData(req, res);
+    if (!mediaData) return;
     deleteMediaAndMetadata(mediaData.id);
     res.status(200).send();
   } catch (err) {
@@ -73,10 +76,10 @@ const getAndValidateMediaData = async (req, res) => {
   const mediaData = await getMediaFromUuid(mediaUuid);
   if (!mediaData) {
     res.status(404).send(`Media with uuid: ${mediaUuid} not found`);
-    return;
+    return null;
   } else if (mediaData === -1) {
     res.status(400).send(`${mediaUuid} is not a valid uuid`);
-    return;
+    return null;
   }
   return mediaData;
 };
