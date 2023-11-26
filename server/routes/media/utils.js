@@ -45,3 +45,14 @@ module.exports.metadataUpsert = async (
   );
   return metadataUpsertQuery.rows[0].id;
 };
+
+module.exports.deleteMediaAndMetadata = async uuid => {
+  const deleteMediaQuery = await SQLQuery.executeQuery(
+    'DELETE FROM media WHERE id = $1 RETURNING media.metadata_id;',
+    [uuid]
+  );
+  const metadataUUID = deleteMediaQuery.rows[0].metadata_id;
+  await SQLQuery.executeQuery('DELETE FROM metadata WHERE id = $1', [
+    metadataUUID,
+  ]);
+};
