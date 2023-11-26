@@ -3,11 +3,40 @@ const {
   getMediaFromUuid,
   metadataUpsert,
   deleteMediaAndMetadata,
+  countAllMedia,
+  getAllMedia,
 } = require('./utils');
-
+const Pagination = require('./Pagination');
 const express = require('express');
 const router = express.Router();
 
+// Get-all endpoint returning a pagination of all entries and their metadata
+router.get('/', async (req, res) => {
+  try {
+    const { query, originalUrl } = req;
+    const limit = parseInt(query.limit) || 100;
+    const offset = parseInt(query.offset) || 0;
+
+    if (isNaN(limit) || isNaN(offset) || limit < 0 || offset < 0) {
+      res.status(400).send('Limit and Offset must be positive integers');
+      return;
+    }
+
+    const total = await countAllMedia();
+    if (!total) {
+      res.status(200).send(Pagination.getEmptyPagination(originalUrl, query));
+      return;
+    }
+
+    const media = await getAllMedia(limit, offset);
+    res.status(200).send(new Pagination(media, total, originalUrl, query));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
+// Upsert metadata for an entry given its uuid
 router.post('/:media', async (req, res) => {
   try {
     // Instead of an image this is going to accept a base64 encoded string of an image (or blob)
@@ -34,7 +63,7 @@ router.post('/:media', async (req, res) => {
 
     // Everything has been validated and is good to go
     const metadataId = await metadataUpsert(
-      mediaData.id,
+      mediaData.uuid,
       thumbnail,
       title,
       description,
@@ -48,6 +77,7 @@ router.post('/:media', async (req, res) => {
   }
 });
 
+// Get metadata for an entry
 router.get('/:media', async (req, res) => {
   try {
     const mediaData = await getAndValidateMediaData(req, res);
@@ -59,11 +89,12 @@ router.get('/:media', async (req, res) => {
   }
 });
 
+// Delete an entry and its metadata given its uuid
 router.delete('/:media', async (req, res) => {
   try {
     const mediaData = await getAndValidateMediaData(req, res);
     if (!mediaData) return;
-    deleteMediaAndMetadata(mediaData.id);
+    deleteMediaAndMetadata(mediaData.uuid);
     res.status(200).send();
   } catch (err) {
     console.error(err);

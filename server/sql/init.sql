@@ -13,6 +13,7 @@ CREATE TABLE media (
     file_name VARCHAR(255) NOT NULL,
     media_name VARCHAR(255) NOT NULL,
     metadata_id UUID,
+    created TIMESTAMP NOT NULL,
     FOREIGN KEY (metadata_id) REFERENCES metadata(id)
         ON UPDATE CASCADE
 );

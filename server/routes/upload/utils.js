@@ -5,7 +5,13 @@ module.exports.STATIC_DIR = STATIC_DIR;
 
 module.exports.addMedia = async (fileName, salt) => {
   const query = new SQLQuery('add_media');
-  return (await query.execute([salt + fileName, fileName])).rows[0].id;
+  return (
+    await query.execute([
+      salt + fileName,
+      fileName,
+      new Date(Date.now()).toISOString(),
+    ])
+  ).rows[0].id;
 };
 
 module.exports.validateMedia = file => {

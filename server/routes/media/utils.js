@@ -1,4 +1,5 @@
 const SQLQuery = require('../../sql/SQLQuery');
+const mediaRowMapper = require('./mediaRowMapper');
 
 module.exports.validateImage = async buffer => {
   try {
@@ -16,6 +17,20 @@ module.exports.validateImage = async buffer => {
   }
 };
 
+module.exports.countAllMedia = async () => {
+  const countAllMediaQuery = await SQLQuery.executeQuery(
+    'SELECT COUNT(*) FROM media;'
+  );
+  return parseInt(countAllMediaQuery.rows[0]?.count);
+};
+
+module.exports.getAllMedia = async (limit, offset) => {
+  const getAllMediaQuery = new SQLQuery('get_all_media');
+  const allMediaResponse = await getAllMediaQuery.execute([limit, offset]);
+  if (!allMediaResponse.rowCount) return [];
+  return allMediaResponse.rows.map(row => mediaRowMapper(row));
+};
+
 module.exports.getMediaFromUuid = async uuid => {
   // Test to ensure it is a valid uuid that is being sent, if not return -1 to signify a 400 error should be thrown
   const uuidValidationRegex =
@@ -25,11 +40,7 @@ module.exports.getMediaFromUuid = async uuid => {
   const getMediaQuery = new SQLQuery('get_media');
   const mediaData = await getMediaQuery.execute([uuid]);
   if (!mediaData.rowCount) return null;
-
-  // Format the metadata before returning
-  const metadataObject = mediaData.rows[0];
-  metadataObject.release_date = new Date(metadataObject.release_date);
-  return metadataObject;
+  return mediaRowMapper(mediaData.rows[0]);
 };
 
 module.exports.metadataUpsert = async (
@@ -51,8 +62,10 @@ module.exports.deleteMediaAndMetadata = async uuid => {
     'DELETE FROM media WHERE id = $1 RETURNING media.metadata_id;',
     [uuid]
   );
-  const metadataUUID = deleteMediaQuery.rows[0].metadata_id;
-  await SQLQuery.executeQuery('DELETE FROM metadata WHERE id = $1', [
-    metadataUUID,
-  ]);
+  if (deleteMediaQuery.rowCount) {
+    const metadataUUID = deleteMediaQuery.rows[0].metadata_id;
+    await SQLQuery.executeQuery('DELETE FROM metadata WHERE id = $1', [
+      metadataUUID,
+    ]);
+  }
 };
