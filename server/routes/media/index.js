@@ -50,4 +50,23 @@ router.post('/:media/metadata', async (req, res) => {
   }
 });
 
+router.get('/:media/metadata', async (req, res) => {
+  try {
+    const mediaUuid = req.params.media;
+    const mediaData = await getMediaFromUuid(mediaUuid);
+    if (!mediaData) {
+      res.status(404).send(`Media with uuid: ${mediaUuid} not found`);
+      return;
+    } else if (mediaData === -1) {
+      res.status(400).send(`${mediaUuid} is not a valid uuid`);
+      return;
+    }
+
+    res.status(200).send(mediaData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
 module.exports = router;

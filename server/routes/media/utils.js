@@ -25,7 +25,11 @@ module.exports.getMediaFromUuid = async uuid => {
   const getMediaQuery = new SQLQuery('get_media');
   const mediaData = await getMediaQuery.execute([uuid]);
   if (!mediaData.rowCount) return null;
-  return mediaData.rows[0];
+
+  // Format the metadata before returning
+  const metadataObject = mediaData.rows[0];
+  metadataObject.release_date = new Date(metadataObject.release_date);
+  return metadataObject;
 };
 
 module.exports.metadataUpsert = async (
