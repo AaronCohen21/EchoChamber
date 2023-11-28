@@ -1,5 +1,7 @@
 const SQLQuery = require('../../sql/SQLQuery');
 const mediaRowMapper = require('./mediaRowMapper');
+const path = require('path');
+const fs = require('fs');
 
 module.exports.validateImage = async buffer => {
   try {
@@ -59,13 +61,22 @@ module.exports.metadataUpsert = async (
 
 module.exports.deleteMediaAndMetadata = async uuid => {
   const deleteMediaQuery = await SQLQuery.executeQuery(
-    'DELETE FROM media WHERE id = $1 RETURNING media.metadata_id;',
+    'DELETE FROM media WHERE id = $1 RETURNING media.metadata_id, media.file_name;',
     [uuid]
   );
   if (deleteMediaQuery.rowCount) {
-    const metadataUUID = deleteMediaQuery.rows[0].metadata_id;
+    const { metadata_id, file_name } = deleteMediaQuery.rows[0];
     await SQLQuery.executeQuery('DELETE FROM metadata WHERE id = $1', [
-      metadataUUID,
+      metadata_id,
     ]);
+    fs.unlink(
+      path.resolve(`${__dirname}/../../static/video/${file_name}`),
+      err => {
+        if (err)
+          console.error(
+            `Error deleting ${file_name} from media object ${uuid}:\n${err}`
+          );
+      }
+    );
   }
 };
