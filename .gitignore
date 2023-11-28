@@ -2,6 +2,11 @@ server/static/video/*
 server/static/images/*
 server/static/tmp/*
 server/sql/.project
+client/.pnp
+client/coverage
+client/build
+.DS_Store
+.ds_store
 
 # Logs
 logs
