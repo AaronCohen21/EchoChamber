@@ -2,7 +2,6 @@ SELECT
   media.id,
   media.file_name,
   media.media_name,
-  metadata.thumbnail,
   metadata.title,
   metadata.description,
   metadata.release_date

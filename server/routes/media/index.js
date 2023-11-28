@@ -5,6 +5,7 @@ const {
   deleteMediaAndMetadata,
   countAllMedia,
   getAllMedia,
+  getMediaThumbnail,
 } = require('./utils');
 const Pagination = require('./Pagination');
 const express = require('express');
@@ -30,6 +31,30 @@ router.get('/', async (req, res) => {
 
     const media = await getAllMedia(limit, offset);
     res.status(200).send(new Pagination(media, total, originalUrl, query));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
+// Get metadata for an entry
+router.get('/:media', async (req, res) => {
+  try {
+    const mediaData = await getAndValidateMediaData(req, res);
+    if (!mediaData) return;
+    res.status(200).send(mediaData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+  }
+});
+
+// Get the base64 hash of a specific media's thumbnail
+router.get('/:media/thumbnail', async (req, res) => {
+  try {
+    const mediaData = await getAndValidateMediaData(req, res);
+    if (!mediaData) return;
+    res.status(200).send(await getMediaThumbnail(mediaData.uuid));
   } catch (err) {
     console.error(err);
     res.status(500).send(err.message);
@@ -71,18 +96,6 @@ router.post('/:media', async (req, res) => {
     );
 
     res.status(201).send(metadataId);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err.message);
-  }
-});
-
-// Get metadata for an entry
-router.get('/:media', async (req, res) => {
-  try {
-    const mediaData = await getAndValidateMediaData(req, res);
-    if (!mediaData) return;
-    res.status(200).send(mediaData);
   } catch (err) {
     console.error(err);
     res.status(500).send(err.message);

@@ -45,6 +45,16 @@ module.exports.getMediaFromUuid = async uuid => {
   return mediaRowMapper(mediaData.rows[0]);
 };
 
+module.exports.getMediaThumbnail = async uuid => {
+  const thumbnailQuery = await SQLQuery.executeQuery(
+    'SELECT metadata.thumbnail FROM metadata WHERE metadata.id = (SELECT media.metadata_id FROM media WHERE media.id = $1);',
+    [uuid]
+  );
+  if (!thumbnailQuery.rowCount) return null;
+  console.log('hi');
+  return thumbnailQuery.rows[0].thumbnail;
+};
+
 module.exports.metadataUpsert = async (
   mediaUuid,
   thumbnail,
