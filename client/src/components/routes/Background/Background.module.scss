@@ -13,13 +13,13 @@ $theme_gray: #a4b3b6;
   position: absolute;
 }
 
-.blur::before {
+// This makes it so that you can't highlight the waves with your cursor
+.background::before {
   z-index: -1;
   content: '';
   position: absolute;
   width: 100vw;
   height: 100vh;
-  backdrop-filter: blur(7px);
 }
 
 .wave {
@@ -43,6 +43,43 @@ $theme_gray: #a4b3b6;
   }
 }
 
-.content {
+.contentBackground {
   position: absolute;
+  width: 90vw;
+  height: 90vh;
+}
+
+.content {
+  padding: 30px;
+  // 100% - paddingTop - paddingBottom
+  max-height: calc(100% - 60px);
+  overflow: scroll;
+
+  // Hide scrollbar
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+// Hide scrollbar
+.content::-webkit-scrollbar {
+  display: none;
+}
+
+.contentBackground::before {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+}
+
+.contentContainer {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

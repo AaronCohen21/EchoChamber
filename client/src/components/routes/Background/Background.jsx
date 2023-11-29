@@ -12,7 +12,6 @@ import wave5 from './waves/wave5.svg';
 import styles from './Background.module.scss';
 
 const Background = () => {
-  // TODO: put the <Outlet/> component somewhere once the background is done
   const { width } = useWindowDimensions();
   const waves = useMemo(
     () => [
@@ -35,10 +34,14 @@ const Background = () => {
 
   return (
     <div>
-      <div className={styles.content}>
-        <Outlet />
+      <div className={styles.contentContainer}>
+        <div className={styles.contentBackground}>
+          <div className={styles.content}>
+            <Outlet />
+          </div>
+        </div>
       </div>
-      <div className={styles.blur}>
+      <div className={styles.background}>
         <div className={styles.wavesContainer}>
           {waves.map((waveData, i) => {
             const [wave] = waveData;
