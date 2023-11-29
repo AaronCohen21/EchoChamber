@@ -1,0 +1,48 @@
+// TODO: make these available globally in a theme.scss file
+$theme_background_purple: #2a1b3d;
+$theme_dark_purple: #44318d;
+$theme_light_purple: #8265a7;
+$theme_pink: #d83f87;
+$theme_gray: #a4b3b6;
+
+.wavesContainer {
+  z-index: -2;
+  width: 100vw;
+  height: 100vh;
+  background-color: $theme_background_purple;
+  position: absolute;
+}
+
+.blur::before {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(7px);
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  display: inline-flex;
+  width: max-content;
+  transform-origin: bottom left;
+  transform: scale(2) translateY(2%);
+}
+
+.waveAnimation {
+  animation: leftToRight;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes leftToRight {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.content {
+  position: absolute;
+}

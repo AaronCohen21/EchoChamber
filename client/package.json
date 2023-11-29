@@ -8,10 +8,12 @@
     "@testing-library/user-event": "^13.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "6",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.0"
   },
   "devDependencies": {
+    "sass": "^1.69.5",
     "serve": "^14.2.1"
   },
   "scripts": {
