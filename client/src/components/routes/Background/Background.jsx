@@ -13,6 +13,7 @@ import styles from './Background.module.scss';
 
 const Background = () => {
   const { width } = useWindowDimensions();
+  // Each number next to the wave svg is how long its animation takes to complete
   const waves = useMemo(
     () => [
       [wave1, 27],
@@ -26,6 +27,7 @@ const Background = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const waveRefs = [useRef(), useRef(), useRef(), useRef(), useRef()];
 
+  // Start animations on load
   useEffect(() => {
     waveRefs.forEach((ref, i) => {
       ref.current.style.animationDuration = `${waves[i][1]}s`;
@@ -41,12 +43,12 @@ const Background = () => {
           </div>
         </div>
       </div>
+
       <div className={styles.background}>
         <div className={styles.wavesContainer}>
           {waves.map((waveData, i) => {
             const [wave] = waveData;
-            // width of the wave svg in pixels
-            const waveWidth = 1919.0;
+            const waveWidth = 1919.0; // width of the wave svg in pixels
             const numWaves = Math.ceil(width / waveWidth) * 2;
             return (
               <div className={styles.wave} key={`wave-${i}`}>
