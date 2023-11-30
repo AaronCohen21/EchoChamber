@@ -1,9 +1,11 @@
+$contentPadding: 30px;
 // TODO: make these available globally in a theme.scss file
 $theme_background_purple: #2a1b3d;
 $theme_dark_purple: #44318d;
 $theme_light_purple: #8265a7;
 $theme_pink: #d83f87;
 $theme_gray: #a4b3b6;
+$header_height: 105px;
 
 .wavesContainer {
   z-index: -2;
@@ -43,16 +45,8 @@ $theme_gray: #a4b3b6;
   }
 }
 
-.contentBackground {
-  position: absolute;
-  width: 90vw;
-  height: 90vh;
-}
-
 .content {
-  padding: 30px;
-  // 100% - paddingTop - paddingBottom
-  max-height: calc(100% - 60px);
+  max-height: 100%;
   overflow: scroll;
 
   // Hide scrollbar
@@ -65,20 +59,17 @@ $theme_gray: #a4b3b6;
   display: none;
 }
 
-.contentBackground::before {
-  z-index: -1;
-  content: '';
+.contentBackground {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  width: calc(100% - 4 * $contentPadding);
+  height: calc(100% - 2 * $contentPadding);
 }
 
 .contentContainer {
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - $header_height);
+  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;

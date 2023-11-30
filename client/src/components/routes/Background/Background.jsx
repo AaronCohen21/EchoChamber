@@ -1,4 +1,5 @@
 import { useRef, useEffect, useMemo } from 'react';
+import Header from '../../Header';
 import { Outlet } from 'react-router-dom';
 
 import useWindowDimensions from '../../../hooks/useWindowDimensions';
@@ -36,6 +37,7 @@ const Background = () => {
 
   return (
     <div>
+      <Header />
       <div className={styles.contentContainer}>
         <div className={styles.contentBackground}>
           <div className={styles.content}>
